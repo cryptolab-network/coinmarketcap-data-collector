@@ -50,12 +50,18 @@ impl Database {
       let options = FindOneAndUpdateOptions::builder()
         .upsert(Some(true))
         .build();
-      db.collection::<serde_json::Value>("price").find_one_and_update(doc! {
+      let result = db.collection::<serde_json::Value>("price").find_one_and_update(doc! {
         "timestamp": timestamp
       }, doc! {
-        "price": quote.price,
-        "timestamp": timestamp
+        "$set" : {
+          "price": quote.price,
+          "timestamp": timestamp
+        }
       }, options).await;
+      match result {
+          Ok(_) => {},
+          Err(e) => {println!("{:?}", e)},
+      }
       Ok(())
     }
   }

@@ -25,7 +25,7 @@ impl Scheduler {
     let mut sched = JobScheduler::new();
     let coin = self.coin.clone();
     self.handle_closing_price(coin.clone().as_str()).await;
-    let _ = sched.add(Job::new("0 0 0 * * ?", move |_uuid, _l| {
+    let _ = sched.add(Job::new("0 5 0 * * ?", move |_uuid, _l| {
       println!("Execute Sched");
       let coin_ = coin.clone();
       let mut this_ = this.clone();
@@ -42,6 +42,7 @@ impl Scheduler {
     println!("Get price of {}", coin);
     let price = self.cmc_collector.get_closing_price(coin).await;
       if let Ok(price) = price {
+        println!("{:?}", price);
         self.db.save_price(coin.to_string(), price).await;
       }
   }

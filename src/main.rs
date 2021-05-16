@@ -16,7 +16,7 @@ use database::Database;
 async fn main() {
     env::set_var("RUST_BACKTRACE", "1");
     env_logger::init();
-    Config::init("./config/dev.json".to_string());
+    Config::init("./config/prod.json".to_string());
     let mut kusama_db = Database::new(Config::current().db_address.parse().unwrap(),
         Config::current().db_port, Config::current().kusama_db_name.as_str());
     let result = kusama_db.connect().await;
